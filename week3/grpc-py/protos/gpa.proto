@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "io.grpc.examples";
+
+service GPA {
+  rpc GetGPA(StudentId) returns (GPAResponse);
+  rpc CreateGPA(GPARequest) returns (Void);
+}
+
+message Void {}
+
+message StudentId {
+  int64 id = 1;
+}
+
+message GPAResponse {
+  float gpa_score = 1;
+}
+
+message GPARequest {
+  StudentId student_id = 1;
+  float gpa_score = 2;
+}

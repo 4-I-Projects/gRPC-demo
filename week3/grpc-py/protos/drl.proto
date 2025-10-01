@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "io.grpc.examples";
+
+import "gpa.proto";
+
+service DRL{
+  rpc GetDRLScore(StudentId) returns (DRLResponse);
+  rpc CreateDRLScore(DRLRequest) returns (Void);
+}
+
+message DRLRequest {
+  StudentId student_id = 1;
+  float drl_score = 2;
+}
+
+message DRLResponse {
+  float drl_score = 1;
+}
+
+

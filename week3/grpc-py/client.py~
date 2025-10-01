@@ -1,0 +1,33 @@
+import logging
+
+import grpc
+import drl_pb2_grpc
+import drl_pb2
+import gpa_pb2
+import gpa_pb2_grpc
+
+def run():
+    # NOTE(gRPC Python Team): .close() is possible on a channel and should be
+    # used in circumstances in which the with statement does not fit the needs
+    # of the code.
+    id = input("Will try to get gpa and drl for: ")
+    with grpc.insecure_channel("localhost:50051") as channel:
+        stub = drl_pb2_grpc.DRLStub(channel)
+        # request = drl_pb2.DRLRequest(student_id=gpa_pb2.StudentId(id=id), drl_score=1.0)
+        # stub.CreateDRLScore(request)
+        drl_response = stub.GetDRLScore(gpa_pb2.StudentId(id=int(id)))
+    with grpc.insecure_channel("localhost:50052") as channel:
+        stub = gpa_pb2_grpc.GPAStub(channel)
+        request = gpa_pb2.GPARequest(student_id=gpa_pb2.StudentId(id=int(id)), gpa_score=1.0)
+        stub.CreateGPA(request)
+        gpa_response = stub.GetGPA(gpa_pb2.StudentId(id=int(id)))
+
+    print(f"Student id {id}")
+    print("GPA = ", str(gpa_response.gpa_score))
+    print("DRL = ", str(drl_response.drl_score))
+
+
+if __name__ == "__main__":
+    logging.basicConfig()
+    run()
+
